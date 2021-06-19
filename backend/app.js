@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const app = express(); 
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 
 
 // project imports
@@ -14,7 +15,8 @@ const authRoutes = require("./routes/auth")
 const port = 3000;
 
 // middlewares
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
+// app.use(express.urlencoded());
 app.use(cors());
 app.use(cookieParser())
 

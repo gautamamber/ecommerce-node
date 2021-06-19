@@ -30,8 +30,7 @@ var userSchema = new mongoose.Schema({
     // TODO: Come back here
 
     encry_password: {
-        type: String,
-        required: true
+        type: String
     },
     salt: String,
 
@@ -63,26 +62,6 @@ userSchema.virtual("domain").get(function() {
 
 // schema methods
 
-userSchema.method = {
-    securePassword: function(plainPassword) {
-        if (!password) return "";
-
-        try {
-            hash = crypto.createHmac('sha256', this.salt)
-            .update(plainPassword)
-            .digest('hex');
-
-        } catch(err) {
-            return "";
-        }
-    },
-
-    authenticate: function(plainpassword) {
-        return this.securePassword(plainpassword) === this.encry_password
-    }
-}
-
-
 userSchema.virtual("password")
     .set(function(password){
         this._password = password
@@ -92,6 +71,27 @@ userSchema.virtual("password")
     .get(function(){
         return this._password;
     })
+
+userSchema.methods = {
+
+    authenticate: function(plainpassword) {
+        return this.securePassword(plainpassword) === this.encry_password
+    },
+
+    securePassword: function(plainPassword) {
+        if (!plainPassword) return "";
+
+        try {
+            hash = crypto.createHmac('sha256', this.salt)
+            .update(plainPassword)
+            .digest('hex');
+
+        } catch(err) {
+            return "";
+        }
+    }
+}
+
 
 
 module.exports = mongoose.model("User", userSchema);
