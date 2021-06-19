@@ -3,9 +3,15 @@ const express = require("express");
 
 // create instance
 const app = express();
+// const bodyParser = require("body-parser");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const port = 3000;
 
+// app.use(bodyParser.json());
+app.use(cors);
+app.use(cookieParser())
 
 const admin = (req, res) => {
     return res.send("this is admin page")
