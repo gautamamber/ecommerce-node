@@ -44,7 +44,7 @@ var userSchema = new mongoose.Schema({
         default: []
     }
 
-})
+}, {timestamp: true})
 
 // virtual field create on the fly or dynamically
 userSchema.virtual("domain").get(function() {
