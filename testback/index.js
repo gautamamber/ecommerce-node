@@ -7,11 +7,23 @@ const app = express();
 const port = 3000;
 
 
+const admin = (req, res) => {
+    return res.send("this is admin page")
+}
+
+
 // while using curly braces return is necessary
 // in req and res order is necessary
 app.get('/', (req, res) => {
     return res.send("Hello world!");
 });
+
+const isAdmin = (req, res, next) => {
+    console.log("is admin is running")
+    next();
+}
+
+app.get("/admin", isAdmin, admin);
 
 app.get('/login', (req, res) => {
     return res.send("you are visiting login route");
