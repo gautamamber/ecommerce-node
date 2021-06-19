@@ -9,9 +9,15 @@ const cookieParser = require("cookie-parser");
 
 const port = 3000;
 
+// middlewares
 // app.use(bodyParser.json());
 app.use(cors);
 app.use(cookieParser())
+
+
+// routes
+
+
 
 const admin = (req, res) => {
     return res.send("this is admin page")
