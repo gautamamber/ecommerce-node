@@ -37,6 +37,7 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
     // extract email and password
     // destructring
+    const errors = validationResult(req);
     const {email, password} = req.body;
 
     if (!errors.isEmpty()) {
@@ -46,8 +47,8 @@ exports.signin = (req, res) => {
     }
 
     User.findOne({email}, (err, user) => {
-        if (err) {
-            res.status(400).json({
+        if (err || !user) {
+            return res.status(400).json({
                 error: "User does not exists"
             })
         }
@@ -81,7 +82,17 @@ exports.signin = (req, res) => {
 
 
 exports.signout = (req, res) => {
+    // clear the cookie of name token
+    res.clearCookie('token')
     res.json({
-        message: "User Signout!"
-    })
+        message: "User Signout Successfully!"
+    });
 }
+
+// protected routes
+exports.isSignedIn = expressJwt({
+    secret: process.env.SECRET,
+    userProperty: "auth"
+})
+
+// custom middlewares
