@@ -72,3 +72,85 @@ exports.createProduct = (req, res) => {
     })
 
 }
+
+exports.getProduct = (req, res) => {
+    res.product.photo = undefined
+    return res.json(req.product);
+    // put middleware, add loaded photo url
+}
+
+
+exports.photo = (req, res, next) => {
+    if (req.product.photo.data) {
+        res.set("Content-Type", req.product.photo.contentType)
+        return res.send(req.product.photo.data)
+
+    }
+    next();
+}
+
+exports.deleteProduct = (req, res) => {
+    // delete products
+    let product = req.product;
+    product.remove((err, product) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Failed to delete"
+            });
+        }
+        res.json(product);
+    })
+}
+
+exports.updateProduct = (req, res) => {
+
+}
+
+exports.getAllProducts = (req, res) => {
+    let limit = req.query.limit ?  parseInt(req.query.limit) : 8 
+    Product.find()
+    .sort()
+    .select("-photo")
+    .limit(limit)
+    .exec((err, products) => {
+        if (err) {
+            return res.status(400).json({
+                error: "No product find"
+            });
+        }
+        res.json(products);
+    })
+}
+
+
+exports.updateStock = (req, res, next) => {
+    let myOperations = req.body.order.products.map(prod => {
+        return {
+            updateOne: {
+                filter: {_id: prod._id},
+                update: {$inc: {stock: -prod.count, sold: +prod.count}}
+            }
+        }
+    })
+
+    Product.bulkWrite(myOperations, {}, (err, product) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Bulk operation fail"
+            })
+        }
+        next();
+    })
+}
+
+
+exports.getAllCategories = (req, res) => {
+    Product.distinct("category", {}, (err, category) {
+        if (err) {
+            return res.status(400).json({
+                error: "Not found"
+            });
+        }
+        res.json(category);
+    })
+}
