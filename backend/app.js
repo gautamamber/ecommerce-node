@@ -11,6 +11,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/auth");
 const userRoutes = require('./routes/user');
 const categoryRoutes = require("./routes/category");
+const productRoutes = require("./routes/product");
 // port
 const port = 3000;
 
@@ -38,6 +39,7 @@ mongoose.connect("mongodb://localhost:27017/ecommerce", {
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
+app.use("/api", productRoutes);
 app.get('/', (req, res) => {
     return res.send("Hello world!")
 });
