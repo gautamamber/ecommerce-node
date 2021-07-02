@@ -23,7 +23,7 @@ router.post('/signin', [
 router.get("/signout", signout)
 
 router.get("/test", isSignedIn, (res, req) => {
-    res.setEncoding("A protected route");
+    res.send(req.auth);
 });
 
 module.exports = router;

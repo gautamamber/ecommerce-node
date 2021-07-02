@@ -96,3 +96,27 @@ exports.isSignedIn = expressJwt({
 })
 
 // custom middlewares
+
+exports.isAuthenticated = (req, res, next) => {
+    // check if user if authenticated or not
+    let checker = req.profile && req.auth && req.profile._id === req.auth._id;
+    if (!checker) {
+        return res.status(403).json({
+            error: "Access denied"
+        })
+    }
+    next();
+}
+
+exports.isAdmin = (req, res, next) => {
+    // for admin check role
+    if (req.profile.role === 0) {
+        return res.status(403).json({
+            error: "You are not an Admin, Access Denied"
+        });
+    }
+    next();
+}
+
+
+// next() means always middleware
