@@ -71,3 +71,41 @@ exports.userPurchaseList = (req, res) => {
     })
 
 }
+
+
+exports.pushOrderInPurchaseList = (req, res, next) => {
+    // use push
+
+    let purchases = []
+    req.body.order.products.forEach(element => {
+        purchases.push({
+            _id: product._id,
+            name: product.name,
+            description: product.description,
+            category: product.category,
+            quantity: product.quantity,
+            amount: req.body.order.amount,
+            transaction_id: req.body.order_transaction_id
+        })
+    });
+
+    // store in db
+
+    User.findByIdAndUpdate(
+        {_id: req.profile.id},
+        {$push: {purchases: purchases}},
+        // send updated data
+        {new: true},
+        (err, purchases) => {
+            if (err) {
+                return res.status(400).json({
+                    error: "Unable to save purchased list"
+                })
+            }
+        }
+        
+
+    )
+
+    next()
+}

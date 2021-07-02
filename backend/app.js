@@ -10,7 +10,7 @@ const bodyParser = require("body-parser");
 // project imports
 const authRoutes = require("./routes/auth");
 const userRoutes = require('./routes/user');
-
+const categoryRoutes = require("./routes/category");
 // port
 const port = 3000;
 
@@ -37,6 +37,7 @@ mongoose.connect("mongodb://localhost:27017/ecommerce", {
 
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
+app.use("/api", categoryRoutes);
 app.get('/', (req, res) => {
     return res.send("Hello world!")
 });
