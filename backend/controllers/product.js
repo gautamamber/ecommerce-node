@@ -145,7 +145,7 @@ exports.updateStock = (req, res, next) => {
 
 
 exports.getAllCategories = (req, res) => {
-    Product.distinct("category", {}, (err, category) {
+    Product.distinct("category", {}, (err, category) => {
         if (err) {
             return res.status(400).json({
                 error: "Not found"
